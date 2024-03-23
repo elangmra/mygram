@@ -9,29 +9,22 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	host     = "localhost"
-	port     = 3306 // Port MySQL default adalah 3306
-	user     = "root"
-	password = "rizki121"          // Ganti dengan kata sandi MySQL Anda
-	dbname   = "mygram" // Ganti dengan nama database Anda
-	db       *gorm.DB
-	err      error
-)
-
+var db *gorm.DB
 func StartDB() {
-    // Buka koneksi ke MySQL
-    db, err = gorm.Open(mysql.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
-
-    if err != nil {
-        log.Fatal("Failed to connect database: ", err)
+    dsn := os.Getenv("DATABASE_URL")
+    if dsn == "" {
+        log.Fatal("DATABASE_URL is not set")
     }
 
-    // Auto migrate tabel-tabel model
-    db.Debug().AutoMigrate(&models.User{}, &models.Comment{}, &models.Photo{}, &models.SocialMedia{})
+    var err error
+    db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    if err != nil {
+        log.Fatal("Failed to connect to database: ", err)
+    }
+
+    // Auto migrate your models here
 }
 
-
 func GetDB() *gorm.DB {
-	return db
+    return db
 }

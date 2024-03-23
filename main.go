@@ -1,13 +1,22 @@
+// main.go
+
 package main
 
 import (
-	"mygram/database"
-	"mygram/router"
+    "mygram/database"
+    "mygram/router"
+    "os"
 )
 
 func main() {
-	database.StartDB()
+    // Start database connection
+    database.StartDB()
 
-	r := router.StartDB()
-	r.Run(":8080")
+    // Start router
+    r := router.StartDB()
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+    r.Run(":" + port)
 }
