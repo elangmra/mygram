@@ -1,30 +1,35 @@
 package database
 
 import (
-	"fmt"
-	"log"
-	"mygram/models"
+    "database/sql"
+    "log"
+    "os"
 
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+    _ "github.com/go-sql-driver/mysql"
 )
 
-var db *gorm.DB
+var db *sql.DB
+
 func StartDB() {
-    dsn := os.Getenv("DATABASE_URL")
-    if dsn == "" {
-        log.Fatal("DATABASE_URL is not set")
-    }
+    // Read DATABASE_URL from environment variable
+    dbURL := os.Getenv("DATABASE_URL")
 
+    // Open database connection
     var err error
-    db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    db, err = sql.Open("mysql", dbURL)
     if err != nil {
-        log.Fatal("Failed to connect to database: ", err)
+        log.Fatal("Error connecting to the database:", err)
     }
 
-    // Auto migrate your models here
+    // Ping the database to verify the connection
+    err = db.Ping()
+    if err != nil {
+        log.Fatal("Error pinging the database:", err)
+    }
+
+    log.Println("Connected to the database")
 }
 
-func GetDB() *gorm.DB {
+func GetDB() *sql.DB {
     return db
 }
