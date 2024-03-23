@@ -16,13 +16,14 @@ func StartDB() {
 
     // Open database connection
     var err error
-    db, err = gorm.Open(mysql.Open(dbURL), &gorm.Config{})
+    database, err = gorm.Open(mysql.Open(dbURL), &gorm.Config{})
     if err != nil {
         log.Fatal("Error connecting to the database:", err)
     }
 
     log.Println("Connected to the database")
-    db.AutoMigrate(&models.User{}, &models.Photo{}, &models.Comment{}, &models.SocialMedia{})
+    database.AutoMigrate(&models.User{}, &models.Photo{}, &models.Comment{}, &models.SocialMedia{})
+    db = database
 }
 
 func GetDB() *gorm.DB {
