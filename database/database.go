@@ -20,20 +20,17 @@ var (
 )
 
 func StartDB() {
-	// Konfigurasi koneksi MySQL
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		user, password, host, port, dbname)
+    // Buka koneksi ke MySQL
+    db, err = gorm.Open(mysql.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 
-	// Buka koneksi ke MySQL
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    if err != nil {
+        log.Fatal("Failed to connect database: ", err)
+    }
 
-	if err != nil {
-		log.Fatal("Failed to connect database: ", err)
-	}
-
-	// Auto migrate tabel-tabel model
-	db.Debug().AutoMigrate(&models.User{}, &models.Comment{}, &models.Photo{}, &models.SocialMedia{})
+    // Auto migrate tabel-tabel model
+    db.Debug().AutoMigrate(&models.User{}, &models.Comment{}, &models.Photo{}, &models.SocialMedia{})
 }
+
 
 func GetDB() *gorm.DB {
 	return db
