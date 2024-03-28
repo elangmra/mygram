@@ -10,6 +10,9 @@ MyGram adalah layanan backend yang dibangun menggunakan Golang, menyediakan API 
 - **Komentar**: Pengguna dapat berkomentar pada foto.
 - **Sosial Media**: Interaksi sosial antar pengguna.
 
+## URL
+https://mygram-production-69f8.up.railway.app/
+
 ## Endpoint API 
 - **GET /users/get** - Menampilkan seluruh user yang terdaftar.
 - **POST /users/register** - Daftar akun user.
