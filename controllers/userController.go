@@ -14,6 +14,13 @@ import (
 var (
 	appJson = "application/json"
 )
+// GetAllUsers - Get all users
+func GetAllUsers(c *gin.Context) {
+	var users []models.User
+	config.DB.Find(&users)
+	c.JSON(http.StatusOK, gin.H{"data": users})
+}
+
 
 func UserRegister(c *gin.Context) {
 	db := database.GetDB()

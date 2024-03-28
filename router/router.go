@@ -12,6 +12,7 @@ func StartDB() *gin.Engine {
 
 	userGroup := r.Group("/users")
 	{
+		userGroup.GET("/get", controllers.GetAllUsers)
 		userGroup.POST("/register", controllers.UserRegister)
 		userGroup.POST("/login", controllers.UserLogin)
 		userGroup.PUT("/edit/:id", middlewares.Authentication(), controllers.UserUpdate)
