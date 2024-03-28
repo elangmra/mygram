@@ -14,12 +14,6 @@ import (
 var (
 	appJson = "application/json"
 )
-// GetAllUsers - Get all users
-func GetAllUsers(c *gin.Context) {
-	var users []models.User
-	config.DB.Find(&users)
-	c.JSON(http.StatusOK, gin.H{"data": users})
-}
 
 
 func UserRegister(c *gin.Context) {
@@ -49,6 +43,24 @@ func UserRegister(c *gin.Context) {
 		"username": User.Username,
 		"age":      User.Age,
 	})
+}
+
+// GetAllUsers
+func GetAllUsers(c *gin.Context) {
+	db := database.GetDB()
+
+	var Users []models.User
+
+	if err := db.Find(&Users).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Bad Request",
+			"msg":   err.Error(),
+		})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, Users)
 }
 
 func UserLogin(c *gin.Context) {
